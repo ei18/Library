@@ -4,8 +4,8 @@ import java.time.LocalDate;
 
 import com.riwi.library.utils.enums.StatusReservation;
 
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,9 +17,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReservationRequest {
     @NotBlank(message = "Reservation Date is required")
+    @Future(message = "The date is invalid, it must be greater than the current date.")
     private LocalDate reservationDate;
-    @NotBlank(message = "Status is required")
-    @Size(min = 1, max = 20, message = "The status must have a maximum of 20 characters.")
     private StatusReservation status;
     private Long userId;
     private Long bookId;
