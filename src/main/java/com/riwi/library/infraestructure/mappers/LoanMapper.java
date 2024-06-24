@@ -1,5 +1,8 @@
 package com.riwi.library.infraestructure.mappers;
 
-public class LoanMapper {
+import org.mapstruct.Mapper;
+
+@Mapper(componentModel = "spring")
+public interface LoanMapper {
     
 }

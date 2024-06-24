@@ -21,4 +21,6 @@ public class ReservationRequest {
     @NotBlank(message = "Status is required")
     @Size(min = 1, max = 20, message = "The status must have a maximum of 20 characters.")
     private StatusReservation status;
+    private Long userId;
+    private Long bookId;
 }

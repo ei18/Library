@@ -1,13 +1,13 @@
 package com.riwi.library.infraestructure.mappers;
 
-import com.riwi.library.api.dto.request.UserRequest;
+import com.riwi.library.api.dto.request.BookRequest;
+import com.riwi.library.api.dto.response.BookAllInfoResponse;
+import com.riwi.library.api.dto.response.BookResponse;
 import com.riwi.library.api.dto.response.LoanResponse;
 import com.riwi.library.api.dto.response.ReservationResponse;
-import com.riwi.library.api.dto.response.UserAllInfoResponse;
-import com.riwi.library.api.dto.response.UserResponse;
+import com.riwi.library.domain.entities.Book;
 import com.riwi.library.domain.entities.Loan;
 import com.riwi.library.domain.entities.Reservation;
-import com.riwi.library.domain.entities.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -15,63 +15,65 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-23T16:06:24-0500",
+    date = "2024-06-23T21:07:45-0500",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.38.0.v20240524-2033, environment: Java 17.0.11 (Eclipse Adoptium)"
 )
 @Component
-public class UserMapperImpl implements UserMapper {
+public class BookMapperImpl implements BookMapper {
 
     @Override
-    public User userRequestToUser(UserRequest request) {
+    public Book bookRequestToBook(BookRequest request) {
         if ( request == null ) {
             return null;
         }
 
-        User user = new User();
+        Book.BookBuilder book = Book.builder();
 
-        user.setEmail( request.getEmail() );
-        user.setFullName( request.getFullName() );
-        user.setPassword( request.getPassword() );
-        user.setRole( request.getRole() );
-        user.setUsername( request.getUsername() );
+        book.author( request.getAuthor() );
+        book.genre( request.getGenre() );
+        book.isbn( request.getIsbn() );
+        book.publicationYear( request.getPublicationYear() );
+        book.title( request.getTitle() );
 
-        return user;
+        return book.build();
     }
 
     @Override
-    public UserAllInfoResponse userToUserAllInfoResponse(User response) {
-        if ( response == null ) {
+    public BookAllInfoResponse bookToBookAllInfoResponse(Book book) {
+        if ( book == null ) {
             return null;
         }
 
-        UserAllInfoResponse.UserAllInfoResponseBuilder userAllInfoResponse = UserAllInfoResponse.builder();
+        BookAllInfoResponse.BookAllInfoResponseBuilder bookAllInfoResponse = BookAllInfoResponse.builder();
 
-        userAllInfoResponse.email( response.getEmail() );
-        userAllInfoResponse.fullName( response.getFullName() );
-        userAllInfoResponse.id( response.getId() );
-        userAllInfoResponse.loans( loanListToLoanResponseList( response.getLoans() ) );
-        userAllInfoResponse.reservations( reservationListToReservationResponseList( response.getReservations() ) );
-        userAllInfoResponse.role( response.getRole() );
-        userAllInfoResponse.username( response.getUsername() );
+        bookAllInfoResponse.author( book.getAuthor() );
+        bookAllInfoResponse.genre( book.getGenre() );
+        bookAllInfoResponse.id( book.getId() );
+        bookAllInfoResponse.isbn( book.getIsbn() );
+        bookAllInfoResponse.loans( loanListToLoanResponseList( book.getLoans() ) );
+        bookAllInfoResponse.publicationYear( book.getPublicationYear() );
+        bookAllInfoResponse.reservations( reservationListToReservationResponseList( book.getReservations() ) );
+        bookAllInfoResponse.title( book.getTitle() );
 
-        return userAllInfoResponse.build();
+        return bookAllInfoResponse.build();
     }
 
     @Override
-    public UserResponse userToUserResponse(User user) {
-        if ( user == null ) {
+    public BookResponse bookToBookResponse(Book book) {
+        if ( book == null ) {
             return null;
         }
 
-        UserResponse.UserResponseBuilder userResponse = UserResponse.builder();
+        BookResponse.BookResponseBuilder bookResponse = BookResponse.builder();
 
-        userResponse.email( user.getEmail() );
-        userResponse.fullName( user.getFullName() );
-        userResponse.id( user.getId() );
-        userResponse.role( user.getRole() );
-        userResponse.username( user.getUsername() );
+        bookResponse.author( book.getAuthor() );
+        bookResponse.genre( book.getGenre() );
+        bookResponse.id( book.getId() );
+        bookResponse.isbn( book.getIsbn() );
+        bookResponse.publicationYear( book.getPublicationYear() );
+        bookResponse.title( book.getTitle() );
 
-        return userResponse.build();
+        return bookResponse.build();
     }
 
     protected LoanResponse loanToLoanResponse(Loan loan) {
