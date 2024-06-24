@@ -1,6 +1,5 @@
 package com.riwi.library.infraestructure.service;
 
-
 import com.riwi.library.api.dto.request.ReservationRequest;
 import com.riwi.library.api.dto.request.ReservationUpdateRequest;
 import com.riwi.library.api.dto.response.ReservationAllInfoResponse;
@@ -55,6 +54,11 @@ public class ReservationService implements IReservationService {
         reservation.setStatus(StatusReservation.PENDING);
 
         return this.reservationMapper.reservationToReservationAllInfoResponse(reservationRepository.save(reservation));
+    }
+
+    @Override
+    public ReservationAllInfoResponse get(Long aLong) {
+        return null;
     }
 
     @Override

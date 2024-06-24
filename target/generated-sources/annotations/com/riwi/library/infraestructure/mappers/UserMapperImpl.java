@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-24T10:51:40-0500",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.38.0.v20240524-2033, environment: Java 17.0.11 (Eclipse Adoptium)"
+    date = "2024-06-24T11:41:55-0500",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.6 (Oracle Corporation)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {
@@ -29,11 +29,11 @@ public class UserMapperImpl implements UserMapper {
 
         User user = new User();
 
+        user.setUsername( request.getUsername() );
+        user.setPassword( request.getPassword() );
         user.setEmail( request.getEmail() );
         user.setFullName( request.getFullName() );
-        user.setPassword( request.getPassword() );
         user.setRole( request.getRole() );
-        user.setUsername( request.getUsername() );
 
         return user;
     }
@@ -46,13 +46,13 @@ public class UserMapperImpl implements UserMapper {
 
         UserAllInfoResponse.UserAllInfoResponseBuilder userAllInfoResponse = UserAllInfoResponse.builder();
 
+        userAllInfoResponse.id( response.getId() );
+        userAllInfoResponse.username( response.getUsername() );
         userAllInfoResponse.email( response.getEmail() );
         userAllInfoResponse.fullName( response.getFullName() );
-        userAllInfoResponse.id( response.getId() );
-        userAllInfoResponse.loans( loanListToLoanResponseList( response.getLoans() ) );
-        userAllInfoResponse.reservations( reservationListToReservationResponseList( response.getReservations() ) );
         userAllInfoResponse.role( response.getRole() );
-        userAllInfoResponse.username( response.getUsername() );
+        userAllInfoResponse.reservations( reservationListToReservationResponseList( response.getReservations() ) );
+        userAllInfoResponse.loans( loanListToLoanResponseList( response.getLoans() ) );
 
         return userAllInfoResponse.build();
     }
@@ -65,13 +65,42 @@ public class UserMapperImpl implements UserMapper {
 
         UserResponse.UserResponseBuilder userResponse = UserResponse.builder();
 
+        userResponse.id( user.getId() );
+        userResponse.username( user.getUsername() );
         userResponse.email( user.getEmail() );
         userResponse.fullName( user.getFullName() );
-        userResponse.id( user.getId() );
         userResponse.role( user.getRole() );
-        userResponse.username( user.getUsername() );
 
         return userResponse.build();
+    }
+
+    protected ReservationResponse reservationToReservationResponse(Reservation reservation) {
+        if ( reservation == null ) {
+            return null;
+        }
+
+        ReservationResponse.ReservationResponseBuilder reservationResponse = ReservationResponse.builder();
+
+        reservationResponse.id( reservation.getId() );
+        reservationResponse.reservationDate( reservation.getReservationDate() );
+        if ( reservation.getStatus() != null ) {
+            reservationResponse.status( reservation.getStatus().name() );
+        }
+
+        return reservationResponse.build();
+    }
+
+    protected List<ReservationResponse> reservationListToReservationResponseList(List<Reservation> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<ReservationResponse> list1 = new ArrayList<ReservationResponse>( list.size() );
+        for ( Reservation reservation : list ) {
+            list1.add( reservationToReservationResponse( reservation ) );
+        }
+
+        return list1;
     }
 
     protected LoanResponse loanToLoanResponse(Loan loan) {
@@ -97,33 +126,6 @@ public class UserMapperImpl implements UserMapper {
         List<LoanResponse> list1 = new ArrayList<LoanResponse>( list.size() );
         for ( Loan loan : list ) {
             list1.add( loanToLoanResponse( loan ) );
-        }
-
-        return list1;
-    }
-
-    protected ReservationResponse reservationToReservationResponse(Reservation reservation) {
-        if ( reservation == null ) {
-            return null;
-        }
-
-        ReservationResponse.ReservationResponseBuilder reservationResponse = ReservationResponse.builder();
-
-        reservationResponse.id( reservation.getId() );
-        reservationResponse.reservationDate( reservation.getReservationDate() );
-        reservationResponse.status( reservation.getStatus() );
-
-        return reservationResponse.build();
-    }
-
-    protected List<ReservationResponse> reservationListToReservationResponseList(List<Reservation> list) {
-        if ( list == null ) {
-            return null;
-        }
-
-        List<ReservationResponse> list1 = new ArrayList<ReservationResponse>( list.size() );
-        for ( Reservation reservation : list ) {
-            list1.add( reservationToReservationResponse( reservation ) );
         }
 
         return list1;

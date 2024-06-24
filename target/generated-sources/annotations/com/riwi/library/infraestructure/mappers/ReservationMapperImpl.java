@@ -1,5 +1,6 @@
 package com.riwi.library.infraestructure.mappers;
 
+import com.riwi.library.api.dto.request.ReservationRequest;
 import com.riwi.library.api.dto.request.ReservationUpdateRequest;
 import com.riwi.library.api.dto.response.BookResponse;
 import com.riwi.library.api.dto.response.ReservationAllInfoResponse;
@@ -13,24 +14,22 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-24T10:55:39-0500",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.38.0.v20240524-2033, environment: Java 17.0.11 (Eclipse Adoptium)"
+    date = "2024-06-24T11:41:55-0500",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.6 (Oracle Corporation)"
 )
 @Component
 public class ReservationMapperImpl implements ReservationMapper {
 
     @Override
-    public Reservation reservationRequestToReservation(Reservation request) {
+    public Reservation reservationRequestToReservation(ReservationRequest request) {
         if ( request == null ) {
             return null;
         }
 
         Reservation.ReservationBuilder reservation = Reservation.builder();
 
-        reservation.book( request.getBook() );
         reservation.reservationDate( request.getReservationDate() );
         reservation.status( request.getStatus() );
-        reservation.user( request.getUser() );
 
         return reservation.build();
     }
@@ -44,9 +43,7 @@ public class ReservationMapperImpl implements ReservationMapper {
         Reservation.ReservationBuilder reservation = Reservation.builder();
 
         reservation.reservationDate( request.getReservationDate() );
-        if ( request.getStatus() != null ) {
-            reservation.status( request.getStatus().name() );
-        }
+        reservation.status( request.getStatus() );
 
         return reservation.build();
     }
@@ -59,11 +56,13 @@ public class ReservationMapperImpl implements ReservationMapper {
 
         ReservationAllInfoResponse.ReservationAllInfoResponseBuilder reservationAllInfoResponse = ReservationAllInfoResponse.builder();
 
-        reservationAllInfoResponse.book( bookToBookResponse( reservation.getBook() ) );
         reservationAllInfoResponse.id( reservation.getId() );
         reservationAllInfoResponse.reservationDate( reservation.getReservationDate() );
-        reservationAllInfoResponse.status( reservation.getStatus() );
+        if ( reservation.getStatus() != null ) {
+            reservationAllInfoResponse.status( reservation.getStatus().name() );
+        }
         reservationAllInfoResponse.user( userToUserResponse( reservation.getUser() ) );
+        reservationAllInfoResponse.book( bookToBookResponse( reservation.getBook() ) );
 
         return reservationAllInfoResponse.build();
     }
@@ -78,26 +77,11 @@ public class ReservationMapperImpl implements ReservationMapper {
 
         reservationResponse.id( reservation.getId() );
         reservationResponse.reservationDate( reservation.getReservationDate() );
-        reservationResponse.status( reservation.getStatus() );
-
-        return reservationResponse.build();
-    }
-
-    protected BookResponse bookToBookResponse(Book book) {
-        if ( book == null ) {
-            return null;
+        if ( reservation.getStatus() != null ) {
+            reservationResponse.status( reservation.getStatus().name() );
         }
 
-        BookResponse.BookResponseBuilder bookResponse = BookResponse.builder();
-
-        bookResponse.author( book.getAuthor() );
-        bookResponse.genre( book.getGenre() );
-        bookResponse.id( book.getId() );
-        bookResponse.isbn( book.getIsbn() );
-        bookResponse.publicationYear( book.getPublicationYear() );
-        bookResponse.title( book.getTitle() );
-
-        return bookResponse.build();
+        return reservationResponse.build();
     }
 
     protected UserResponse userToUserResponse(User user) {
@@ -107,12 +91,29 @@ public class ReservationMapperImpl implements ReservationMapper {
 
         UserResponse.UserResponseBuilder userResponse = UserResponse.builder();
 
+        userResponse.id( user.getId() );
+        userResponse.username( user.getUsername() );
         userResponse.email( user.getEmail() );
         userResponse.fullName( user.getFullName() );
-        userResponse.id( user.getId() );
         userResponse.role( user.getRole() );
-        userResponse.username( user.getUsername() );
 
         return userResponse.build();
+    }
+
+    protected BookResponse bookToBookResponse(Book book) {
+        if ( book == null ) {
+            return null;
+        }
+
+        BookResponse.BookResponseBuilder bookResponse = BookResponse.builder();
+
+        bookResponse.id( book.getId() );
+        bookResponse.title( book.getTitle() );
+        bookResponse.author( book.getAuthor() );
+        bookResponse.publicationYear( book.getPublicationYear() );
+        bookResponse.genre( book.getGenre() );
+        bookResponse.isbn( book.getIsbn() );
+
+        return bookResponse.build();
     }
 }

@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-06-24T10:51:40-0500",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.38.0.v20240524-2033, environment: Java 17.0.11 (Eclipse Adoptium)"
+    date = "2024-06-24T11:41:55-0500",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.6 (Oracle Corporation)"
 )
 @Component
 public class BookMapperImpl implements BookMapper {
@@ -29,11 +29,11 @@ public class BookMapperImpl implements BookMapper {
 
         Book.BookBuilder book = Book.builder();
 
+        book.title( request.getTitle() );
         book.author( request.getAuthor() );
+        book.publicationYear( request.getPublicationYear() );
         book.genre( request.getGenre() );
         book.isbn( request.getIsbn() );
-        book.publicationYear( request.getPublicationYear() );
-        book.title( request.getTitle() );
 
         return book.build();
     }
@@ -46,14 +46,14 @@ public class BookMapperImpl implements BookMapper {
 
         BookAllInfoResponse.BookAllInfoResponseBuilder bookAllInfoResponse = BookAllInfoResponse.builder();
 
-        bookAllInfoResponse.author( book.getAuthor() );
-        bookAllInfoResponse.genre( book.getGenre() );
         bookAllInfoResponse.id( book.getId() );
-        bookAllInfoResponse.isbn( book.getIsbn() );
-        bookAllInfoResponse.loans( loanListToLoanResponseList( book.getLoans() ) );
-        bookAllInfoResponse.publicationYear( book.getPublicationYear() );
-        bookAllInfoResponse.reservations( reservationListToReservationResponseList( book.getReservations() ) );
         bookAllInfoResponse.title( book.getTitle() );
+        bookAllInfoResponse.author( book.getAuthor() );
+        bookAllInfoResponse.publicationYear( book.getPublicationYear() );
+        bookAllInfoResponse.genre( book.getGenre() );
+        bookAllInfoResponse.isbn( book.getIsbn() );
+        bookAllInfoResponse.reservations( reservationListToReservationResponseList( book.getReservations() ) );
+        bookAllInfoResponse.loans( loanListToLoanResponseList( book.getLoans() ) );
 
         return bookAllInfoResponse.build();
     }
@@ -66,14 +66,43 @@ public class BookMapperImpl implements BookMapper {
 
         BookResponse.BookResponseBuilder bookResponse = BookResponse.builder();
 
-        bookResponse.author( book.getAuthor() );
-        bookResponse.genre( book.getGenre() );
         bookResponse.id( book.getId() );
-        bookResponse.isbn( book.getIsbn() );
-        bookResponse.publicationYear( book.getPublicationYear() );
         bookResponse.title( book.getTitle() );
+        bookResponse.author( book.getAuthor() );
+        bookResponse.publicationYear( book.getPublicationYear() );
+        bookResponse.genre( book.getGenre() );
+        bookResponse.isbn( book.getIsbn() );
 
         return bookResponse.build();
+    }
+
+    protected ReservationResponse reservationToReservationResponse(Reservation reservation) {
+        if ( reservation == null ) {
+            return null;
+        }
+
+        ReservationResponse.ReservationResponseBuilder reservationResponse = ReservationResponse.builder();
+
+        reservationResponse.id( reservation.getId() );
+        reservationResponse.reservationDate( reservation.getReservationDate() );
+        if ( reservation.getStatus() != null ) {
+            reservationResponse.status( reservation.getStatus().name() );
+        }
+
+        return reservationResponse.build();
+    }
+
+    protected List<ReservationResponse> reservationListToReservationResponseList(List<Reservation> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<ReservationResponse> list1 = new ArrayList<ReservationResponse>( list.size() );
+        for ( Reservation reservation : list ) {
+            list1.add( reservationToReservationResponse( reservation ) );
+        }
+
+        return list1;
     }
 
     protected LoanResponse loanToLoanResponse(Loan loan) {
@@ -99,33 +128,6 @@ public class BookMapperImpl implements BookMapper {
         List<LoanResponse> list1 = new ArrayList<LoanResponse>( list.size() );
         for ( Loan loan : list ) {
             list1.add( loanToLoanResponse( loan ) );
-        }
-
-        return list1;
-    }
-
-    protected ReservationResponse reservationToReservationResponse(Reservation reservation) {
-        if ( reservation == null ) {
-            return null;
-        }
-
-        ReservationResponse.ReservationResponseBuilder reservationResponse = ReservationResponse.builder();
-
-        reservationResponse.id( reservation.getId() );
-        reservationResponse.reservationDate( reservation.getReservationDate() );
-        reservationResponse.status( reservation.getStatus() );
-
-        return reservationResponse.build();
-    }
-
-    protected List<ReservationResponse> reservationListToReservationResponseList(List<Reservation> list) {
-        if ( list == null ) {
-            return null;
-        }
-
-        List<ReservationResponse> list1 = new ArrayList<ReservationResponse>( list.size() );
-        for ( Reservation reservation : list ) {
-            list1.add( reservationToReservationResponse( reservation ) );
         }
 
         return list1;
