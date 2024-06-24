@@ -5,7 +5,7 @@ public class ErrorMessages{
     public static final String RequiredPassword= "Password is required";    
     public static final String RequiredEmail= "Email is required";
     public static final String RequiredFullName= "Full name is required"; 
-    public static final String RequiredRole= "The role must be 'EMPLOYEE' or 'CUSTOMER'";     
+    public static final String RequiredRole= "The role must be 'ADMIN' or 'USER'";     
     
     public static String IdNotFound(String entity) {
 

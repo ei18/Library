@@ -1,6 +1,9 @@
 package com.riwi.library.api.dto.request;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,8 +21,8 @@ public class BookRequest {
     @NotBlank(message = "Author is required")
     @Size(min = 1, max = 100, message = "The author must have a maximum of 100 characters.")
     private String author;
-    @NotBlank(message = "Publication year is required")
-    @Size(min = 1, max = 11, message = "The publicationYear must have a maximum of 11 characters.")
+    @NotNull(message = "Publication year is required")
+    @Max(value = 2025, message = "The year of publication must have a maximum of 11 characters.")
     private Integer publicationYear;
     @NotBlank(message = "Genre is required")
     @Size(min = 1, max = 50, message = "The genre must have a maximum of 50 characters.")
